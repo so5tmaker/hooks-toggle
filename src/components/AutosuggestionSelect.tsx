@@ -9,12 +9,24 @@ export function AutosuggestionSelect() {
   const [isActive, toggle] = useToggle();
   const [character, setInput] = useInput("");
 
+  // const characters = [
+  //   { character: "Baby Wizard", isActive: true },
+  //   { character: "Scroopy Noopers", isActive: false },
+  //   { character: "Running Bird", isActive: false },
+  //   { character: "Gotron", isActive: false },
+  // ];
+
   const characters = [
     "Baby Wizard",
     "Scroopy Noopers",
     "Running Bird",
     "Gotron",
   ];
+
+  const liNames = characters.map((item) => {
+    const active = item.includes(character) ? " list__item--selected" : "";
+    return <li className={"list__item" + active}>{item}</li>;
+  });
 
   return (
     <div className='wrapper'>
@@ -36,14 +48,7 @@ export function AutosuggestionSelect() {
               onChange={(e) => setInput(e.target.value)}
               placeholder='Type to search...'
             />
-            <ul className='list'>
-              <li className='list__item'>Baby Wizard</li>
-              <li className='list__item list__item--selected'>
-                Scroopy Noopers
-              </li>
-              <li className='list__item'>Running Bird</li>
-              <li className='list__item'>Gotron</li>
-            </ul>
+            <ul className='list'>{liNames}</ul>
           </div>
         )}
       </div>
