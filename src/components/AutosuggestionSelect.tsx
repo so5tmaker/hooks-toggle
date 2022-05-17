@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import cn from "clsx";
 
 import arrow from "../assets/svg/arrow.svg";
@@ -8,13 +8,7 @@ import { useInput } from "../hooks/useInput";
 export function AutosuggestionSelect() {
   const [isActive, toggle] = useToggle();
   const [character, setInput] = useInput("");
-
-  // const characters = [
-  //   { character: "Baby Wizard", isActive: true },
-  //   { character: "Scroopy Noopers", isActive: false },
-  //   { character: "Running Bird", isActive: false },
-  //   { character: "Gotron", isActive: false },
-  // ];
+  const nameInput = useRef(null);
 
   const characters = [
     "Baby Wizard",
@@ -23,9 +17,27 @@ export function AutosuggestionSelect() {
     "Gotron",
   ];
 
+  const handleClickEvent = (item: string) => {
+    const curInput = nameInput.current;
+    if (curInput !== null) {
+      curInput.value = item;
+    }
+  };
+
   const liNames = characters.map((item) => {
-    const active = item.includes(character) ? " list__item--selected" : "";
-    return <li className={"list__item" + active}>{item}</li>;
+    let active = "";
+    if (character !== "") {
+      active = item.includes(character) ? " list__item--selected" : "";
+    }
+    return (
+      <li
+        key={item}
+        className={"list__item" + active}
+        onClick={() => handleClickEvent(item)}
+      >
+        {item}
+      </li>
+    );
   });
 
   return (
@@ -44,7 +56,7 @@ export function AutosuggestionSelect() {
           <div className='options'>
             <input
               className='input'
-              value={character}
+              ref={nameInput}
               onChange={(e) => setInput(e.target.value)}
               placeholder='Type to search...'
             />
